@@ -9,7 +9,7 @@
 			Generates a code from the given options.
 			This mirrors the commandline tool. The options are the same as the full-name commandline keys and json keys.
 			See the commandline tool's docs for more information.
-		string.getRequiredLength(integer currency, Array<[integer currency, integer byteCount]> requirements)
+		string .getRequiredLength(integer currency, Array<[integer currency, integer byteCount]> requirements)
 			Returns the number of bytes needed to validate the given currency.
 
 	Result API:
