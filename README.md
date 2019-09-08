@@ -89,16 +89,16 @@ These are the types of codes that can be generated:
 | Type | Format | Example | Command |
 | :--- | -----: | ------: | :------ |
 | Public |||||
-| plain | `coins-PHASH` | `100-PX5E0462ZD0` | `codegen -p -k t -b 10000 6 -c 100` ||
-| labelled | `label-coins-PHASH` | `FreeCoins!-100-PK3FBDG68NG` | `codegen -p -k t -b 10000 6 -c 100 -l "FreeCoins!"` |  |
-| limited | `coins-limit-PHASH` | `100-10-P9E484TG970` | `codegen -p -k t -b 10000 6 -c 100 -m 10` |  |
-| labelled limited | `label-coins-limit-PHASH` | `FreeCoins!-100-10-PH56RTXH0V8` | `codegen -p -k t -b 10000 6 -c 100 -l "FreeCoins!" -m 10` ||
+| plain | `coins-PHASH` | `100-PX5E0462ZD0` | `codegen --public --key t --bytes 10000 6 --currency 100` ||
+| labelled | `label-coins-PHASH` | `FreeCoins!-100-PK3FBDG68NG` | `codegen --public --key t --bytes 10000 6 --currency 100 --label "FreeCoins!"` |  |
+| limited | `coins-limit-PHASH` | `100-10-P9E484TG970` | `codegen --public --key t --bytes 10000 6 --currency 100 --max 10` |  |
+| labelled limited | `label-coins-limit-PHASH` | `FreeCoins!-100-10-PH56RTXH0V8` | `codegen --public --key t --bytes 10000 6 --currency 100 --label "FreeCoins!" --max 10` ||
 | Personal (name) |||||
-| plain | `user-coins-NHASH` | `Corecii-100-NQVDR9CJQ00` | `codegen -k t -b 10000 6 -n Corecii -c 100` ||
-| labelled | `label-user-coins-NHASH` | `Thanks-Corecii-100-NYGHA84FH18` | `codegen -k t -b 10000 6 -n Corecii -c 100 -l "Thanks"` ||
+| plain | `user-coins-NHASH` | `Corecii-100-NQVDR9CJQ00` | `codegen --key t --bytes 10000 6 --username Corecii --currency 100` ||
+| labelled | `label-user-coins-NHASH` | `Thanks-Corecii-100-NYGHA84FH18` | `codegen --key t --bytes 10000 6 --username Corecii --currency 100 --label "Thanks"` ||
 | Personal (user id) |||||
-| plain | `coins-IHASH` | `100-I775JMS98NG` | `codegen -k t -b 10000 6 -i 9546145 -c 100` |  |
-| labelled | `label-coins-IHASH` | `Thanks-100-IP0BH366EFR` | `codegen -k t -b 10000 6 -i 9546145 -c 100 -l "Thanks"` ||
+| plain | `coins-IHASH` | `100-I775JMS98NG` | `codegen --key t --bytes 10000 6 --userid 9546145 --currency 100` |  |
+| labelled | `label-coins-IHASH` | `Thanks-100-IP0BH366EFR` | `codegen --key t --bytes 10000 6 --userid 9546145 --currency 100 --label "Thanks"` ||
 
 Comments:
 * Limited codes require datastores on validation to check how many times the code has been used. Limited codes are good for giving a code to a small group of players or giving codes in a first-come-first-serve limited manner.
@@ -144,7 +144,7 @@ Options
   -n, --username string        This is a personal code that only the given user name can use
   -i, --userid string          This is a personal code that only the given user id can use
   -l, --label string           User-visible label for this code; this must *not* be a number
-  -m, --limit integer          Limit the maximum number of uses of this code (for public codes only); this
+  -m, --max integer            Limit the maximum number of uses of this code (for public codes only); this
                                requires marking uses in the DataStore
   -c, --currency integer       The amount of currency to give
   -b, --bytes currency bytes   Specifies how many bytes are required for an amount of currency

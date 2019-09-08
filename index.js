@@ -25,7 +25,7 @@ const optionDefs = [
     { name: "username", alias: "n", type: String, description: "This is a personal code that only the given user name can use" },
     { name: "userid", alias: "i", type: String, description: "This is a personal code that only the given user id can use" },
     { name: "label", alias: "l", type: String, description: "User-visible label for this code; this must *not* be a number" },
-    { name: "limit", alias: "m", type: validateInteger, typeLabel: "{underline integer}", description: "Limit the maximum number of uses of this code (for public codes only); this requires marking uses in the DataStore" },
+    { name: "max", alias: "m", type: validateInteger, typeLabel: "{underline integer}", description: "Limit the maximum number of uses of this code (for public codes only); this requires marking uses in the DataStore" },
     { name: "currency", alias: "c", type: validateInteger, typeLabel: "{underline integer}", description: "The amount of currency to give" },
     { name: "bytes", alias: "b", type: validateInteger, typeLabel: "{underline currency} {underline bytes}", multiple: true, description: "Specifies how many bytes are required for an amount of currency" },
 ];
@@ -121,7 +121,7 @@ function merge(location, prefix) {
         console.warn("Label must not be an integer");
         return help();
     }
-    if (!options.public && options.limit) {
+    if (!options.public && options.max) {
         console.warn("Limits cannot be used with personal codes")
         return help();
     }
@@ -172,8 +172,8 @@ function merge(location, prefix) {
         }
     }
     pushCodePart(options.currency);
-    if (options.limit) {
-        pushCodePart(options.limit);
+    if (options.max) {
+        pushCodePart(options.max);
     }
     pushCodePart(codeTag, true);
 
