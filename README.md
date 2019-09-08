@@ -9,6 +9,11 @@ Generator utlity example:
 > codegen -f key.json -b 10000 6 -n Corecii -c 100 -l "Thanks"
 Thanks-Corecii-100-NC0F39R0R4R
 ```
+or verbose:
+```plain
+> codegen --file key.json --bytes 10000 6 --username Corecii --currency 100 --label "Thanks"
+Thanks-Corecii-100-NC0F39R0R4R
+```
 
 Lua module example:
 ```lua
