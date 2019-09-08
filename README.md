@@ -76,7 +76,7 @@ Options
 
 ---
 
-Lua API:
+## Lua API:
 
 ```plain
 HashTwitterCodes API:
