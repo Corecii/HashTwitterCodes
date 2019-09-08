@@ -1,0 +1,19 @@
+{
+  "name": "twitter-code-gen",
+  "version": "0.1.0",
+  "description": "Generates personal twitter codes from a key, name, label, and coin count",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Corecii@corecii.com",
+  "license": "MIT",
+  "dependencies": {
+    "base32-crockford": "0.0.6",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.0.2",
+    "dotenv": "^8.1.0",
+    "fast-sha256": "^1.1.0",
+    "fs-extra": "^8.1.0"
+  }
+}
