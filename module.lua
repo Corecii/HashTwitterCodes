@@ -9,6 +9,8 @@
 			Generates a code from the given options.
 			This mirrors the commandline tool. The options are the same as the full-name commandline keys and json keys.
 			See the commandline tool's docs for more information.
+		string.getRequiredLength(integer currency, Array<[integer currency, integer byteCount]> requirements)
+			Returns the number of bytes needed to validate the given currency.
 
 	Result API:
 		Result .success(...)
@@ -46,12 +48,12 @@
 			The returned string has one matching hash and can be HMAC hashed and compared to the user-provided hash
 			to verify authenticity.
 			If you need a unique string to represent a hash then use this.
-		bool :CheckHashLength(Array<[integer currency, integer bytesRequirement]> requirements)
 			Checks if this code has a secure enough amount of bytes for the given currency count.
-		bool :CheckHash(string key, integer bytes, string|integer|Player player)
+		bool :CheckHash(string key, integer|Array<[integer currency, integer bytesRequirement]> bytes, string|integer|Player player)
 			Gets the validation string using `player`, hashes it using `key`, then compares it
 			to the user-provided hash. Return true if they match, false otherwise.
 			If this is a personal (id) code and player is not provided or is the wrong type, this method will error.
+			For the `bytes` argument, either an absolute integer of required bytes can be provided or a requirements array can be provided.
 		Result<bool success> :CheckAndMarkLimit(number timeout, bool retryOnAmbiguous = false)
 			Checks the global limit for this hash (using datastores) and marks increse the use-count by 1.
 			This method will not error if data stores fail:
@@ -224,6 +226,9 @@ end
 
 function CodeSuccess:CheckHash(key, bytes, ...)
 	local authString = self:GetValidationString(...)
+	if typeof(bytes) == 'table' then
+		bytes = module.getRequiredLength(self.Currency, bytes)
+	end
 	local hash = hmacAuthHash(authString:lower(), key, bytes)
 	local success = hash:upper() == self.Hash:sub(1, #hash):upper()
 	return success
@@ -323,10 +328,10 @@ function CodeSuccess:CheckIdentity(timeout, player)
 	return Result.success(userId == self.CachedUserId)
 end
 
-function CodeSuccess:CheckHashLength(requirements)
+function module.getRequiredLength(currency, requirements)
 	for _, req in ipairs(requirements) do
-		if self.Currency <= req[1] then
-			return self.Bytes >= req[2]
+		if currency <= req[1] then
+			return req[2]
 		end
 	end
 end

@@ -4,6 +4,77 @@ This module has not been fully tested. Please perform your own tests before usin
 
 This provides a utility for generating, reading, and validating hash-based reward codes. Using this utility, you can generate codes to reward players in-game currency on the fly without saving a special code in the DataStore, a database, or your game code.
 
+Generator utlity example:
+```plain
+> codegen -k t -b 10000 6 -n Corecii -c 100 -l "Thanks"
+Thanks-Corecii-100-NYGHA84FH18
+```
+
+Lua module example:
+```lua
+
+-- {<= currencyMax, byteLength} pairs:
+local securityByteLength = {
+    {500, 4},
+    {2000, 6},
+    {5000, 8},
+    {10000, 12},
+}
+
+-- retrieve hmac key from datastore or other safe storage space, then...
+local key = keyFromDataStore
+
+--- in a RemoteFunction...
+
+if playerData.FailedTwitterCodes >= 100 then
+    return false, "Invalid code" -- ban brute-forcers from using codes
+end
+
+local result = HashTwitterCodes.decode(input)
+if not result.Success then
+    return false, "Invalid code"
+end
+
+local validationString = result:GetValidationString(player)
+if #validationString > 100 then
+    return false, "Invalid code" -- prevent fake, resource-consuming codes from being used
+else if playerData.UsedCodes[validationString] then
+    return false, "Already used"
+elseif result.Currency > 10000 then
+    return false, "Invalid code"
+end
+
+if not result:CheckHash(key, securityByteLength, player) then
+    playerData.FailedTwitterCodes = playerData.FailedTwitterCodes + 1
+    return false, "Invalid code"
+end
+
+if result.Limit then
+    local limitResult = result:CheckAndMarkLimit(30, false)
+    if not limitResult.Success then
+        return false, "Roblox API failure, try again later!"
+    elseif not limitResult:Unwrap() then
+        return false, "Code already reached its limit!"
+    end
+end
+
+if result.CodeTag == "n" then
+    local identityResult = result:CheckIdentity(30, player)
+    if not limitResult.Success then
+        return false, "Roblox API failure, try again later!"
+    elseif not identityResult:Unwrap() then
+        return false, "Code is not meant for you!"
+    end
+end
+
+playerData.Coins = playerData.Coins + result.Currency
+
+return true, result.Currency
+
+```
+
+---
+
 The mechanism for this is HMAC hashing. This allows us to authenticate that a message is official on the game server. By giving players authentic, official messages that include what to reward them, players can use those messages as reward codes without us marking those codes in a database or in game code.
 
 Players provide reward details, validation details, and a HMAC hash to the server. The server hashes the validation details and compares it to the given HMAC hash. If the two are a match then the reward details are official, and the player can be rewarded.
@@ -89,6 +160,8 @@ HashTwitterCodes API:
         Generates a code from the given options.
         This mirrors the commandline tool. The options are the same as the full-name commandline keys and json keys.
         See the commandline tool's docs for more information.
+    string.getRequiredLength(integer currency, Array<[integer currency, integer byteCount]> requirements)
+        Returns the number of bytes needed to validate the given currency.
 
 Result API:
     Result .success(...)
