@@ -82,7 +82,7 @@ return true, result.Currency
 
 The mechanism for this is HMAC hashing. This allows us to authenticate that a message is official on the game server. By giving players authentic, official messages that include what to reward them, players can use those messages as reward codes without us marking those codes in a database or in game code.
 
-Players provide reward details, validation details, and a HMAC hash to the server. The server hashes the validation details and compares it to the given HMAC hash. If the two are a match then the reward details are official, and the player can be rewarded.
+Players provide reward details, validation details, and a HMAC hash to the server. The server hashes the validation details using a secret key and compares it to the given HMAC hash. If the two are a match then the reward details are official (i.e. the given hash used the secret key), and the player can be rewarded.
 
 These are the types of codes that can be generated:
 
