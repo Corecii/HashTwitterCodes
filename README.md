@@ -6,8 +6,8 @@ This provides a utility for generating, reading, and validating hash-based rewar
 
 Generator utlity example:
 ```plain
-> codegen -k t -b 10000 6 -n Corecii -c 100 -l "Thanks"
-Thanks-Corecii-100-NYGHA84FH18
+> codegen -f key.json -b 10000 6 -n Corecii -c 100 -l "Thanks"
+Thanks-Corecii-100-NC0F39R0R4R
 ```
 
 Lua module example:
