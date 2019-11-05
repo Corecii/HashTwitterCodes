@@ -161,7 +161,7 @@ end
 function CodeSuccess.is(obj)
 	return type(obj) == 'table' and getmetatable(obj) == CodeSuccess
 end
-function Result:__tostring()
+function CodeSuccess:__tostring()
 	return "Success"
 end
 function CodeSuccess:Unwrap()
